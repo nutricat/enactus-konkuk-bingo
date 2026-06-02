@@ -229,7 +229,7 @@ export default function BingoPage({ params }: { params: Promise<{ id: string }> 
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(5, 1fr)",
+              gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
               gap: 6,
             }}
           >
