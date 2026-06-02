@@ -29,6 +29,7 @@ function getBadgeStyle(count: number) {
 export default function Home() {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [bingoMap, setBingoMap] = useState<Record<string, number>>({});
+  const [cellMap, setCellMap] = useState<Record<string, number>>({});
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -59,6 +60,7 @@ export default function Home() {
     for (const c of checks ?? []) map[c.participant_id]?.add(c.cell_index);
 
     const bingoCount: Record<string, number> = {};
+    const cellCount: Record<string, number> = {};
     for (const p of pList) {
       const checked = map[p.id];
       let count = 0;
@@ -66,8 +68,10 @@ export default function Home() {
         if (line.every((i) => checked.has(i))) count++;
       }
       bingoCount[p.id] = count;
+      cellCount[p.id] = checked.size;
     }
     setBingoMap(bingoCount);
+    setCellMap(cellCount);
     setLoading(false);
   }
 
@@ -110,6 +114,7 @@ export default function Home() {
                 .sort((a, b) => (bingoMap[b.id] ?? 0) - (bingoMap[a.id] ?? 0))
                 .map((p, rank) => {
                   const count = bingoMap[p.id] ?? 0;
+                  const cells = cellMap[p.id] ?? 0;
                   const badge = getBadgeStyle(count);
                   return (
                     <button
@@ -119,11 +124,11 @@ export default function Home() {
                         background: "#fff",
                         borderRadius: 16,
                         border: "none",
-                        padding: "16px 14px",
+                        padding: "14px 12px",
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "flex-start",
-                        gap: 10,
+                        gap: 8,
                         cursor: "pointer",
                         textAlign: "left",
                         position: "relative",
@@ -133,7 +138,7 @@ export default function Home() {
                         style={{
                           position: "absolute",
                           top: 10,
-                          right: 12,
+                          right: 10,
                           fontSize: 11,
                           color: "#bbb",
                           fontWeight: 600,
@@ -141,21 +146,26 @@ export default function Home() {
                       >
                         #{rank + 1}
                       </span>
-                      <span className="font-heading" style={{ fontSize: 16, color: "#111", paddingRight: 20 }}>
+                      <span className="font-heading" style={{ fontSize: 15, color: "#111", paddingRight: 20 }}>
                         {p.name}
                       </span>
-                      <span
-                        style={{
-                          background: badge.bg,
-                          color: badge.color,
-                          borderRadius: 20,
-                          padding: "3px 10px",
-                          fontSize: 12,
-                          fontWeight: 700,
-                        }}
-                      >
-                        {count}빙고
-                      </span>
+                      <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                        <span
+                          style={{
+                            background: badge.bg,
+                            color: badge.color,
+                            borderRadius: 20,
+                            padding: "3px 8px",
+                            fontSize: 11,
+                            fontWeight: 700,
+                          }}
+                        >
+                          {count}빙고
+                        </span>
+                        <span style={{ fontSize: 11, color: "#999", fontWeight: 600 }}>
+                          {cells}/25
+                        </span>
+                      </div>
                     </button>
                   );
                 })}
