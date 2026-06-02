@@ -119,7 +119,7 @@ export default function Home() {
                   return (
                     <button
                       key={p.id}
-                      onClick={() => router.push(`/bingo/${p.id}`)}
+                      onClick={() => router.push(`/bingo/${p.id}?name=${encodeURIComponent(p.name)}&bingo=${count}`)}
                       style={{
                         background: "#fff",
                         borderRadius: 16,
@@ -146,7 +146,7 @@ export default function Home() {
                       >
                         #{rank + 1}
                       </span>
-                      <span className="font-heading" style={{ fontSize: 15, color: "#111", paddingRight: 20 }}>
+                      <span className="font-heading" style={{ fontSize: 15, color: "#111", paddingRight: 20, fontWeight: 600 }}>
                         {p.name}
                       </span>
                       <div style={{ display: "flex", alignItems: "center", gap: 5 }}>

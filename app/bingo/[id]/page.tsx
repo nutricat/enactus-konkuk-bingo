@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase, Participant, BingoCheck } from "@/lib/supabase";
 
 const ITEMS = [
@@ -96,7 +96,11 @@ function getBadgeStyle(count: number) {
 export default function BingoPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const [participant, setParticipant] = useState<Participant | null>(null);
+  const searchParams = useSearchParams();
+  const initialName = searchParams.get("name");
+  const [participant, setParticipant] = useState<Participant | null>(
+    initialName ? ({ id, name: initialName } as Participant) : null
+  );
   const [checked, setChecked] = useState<Set<number>>(new Set());
   const [loading, setLoading] = useState(true);
 
@@ -146,7 +150,7 @@ export default function BingoPage({ params }: { params: Promise<{ id: string }> 
   const bingoCount = completedLines.length;
   const badge = getBadgeStyle(bingoCount);
 
-  if (loading) {
+  if (loading && !participant) {
     return (
       <div style={{ background: "#e8e8ed", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <p style={{ color: "#999" }}>불러오는 중...</p>
@@ -245,13 +249,13 @@ export default function BingoPage({ params }: { params: Promise<{ id: string }> 
                     color: cellColor ? cellColor.color : "#333",
                     border: "none",
                     borderRadius: 12,
-                    padding: "8px 4px",
+                    padding: "10px 4px",
                     fontSize: 10,
                     fontWeight: isChecked ? 700 : 500,
                     cursor: "pointer",
                     textAlign: "center",
                     lineHeight: 1.3,
-                    minHeight: 70,
+                    minHeight: 80,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
