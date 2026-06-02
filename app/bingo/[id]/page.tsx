@@ -114,7 +114,7 @@ export default function BingoPage({ params }: { params: Promise<{ id: string }> 
         .eq("checked", true),
     ]);
     if (p) setParticipant(p);
-    const set = new Set<number>((checks ?? []).map((c: BingoCheck) => c.cell_index));
+    const set = new Set<number>((checks ?? []).map((c: { cell_index: number }) => c.cell_index));
     setChecked(set);
     setLoading(false);
   }
