@@ -1,0 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;800&display=swap");
+@import "tailwindcss";
+
+:root {
+  --bg: #e8e8ed;
+}
+
+body {
+  background: var(--bg);
+  font-family: "Noto Sans KR", sans-serif;
+  font-weight: 500;
+}
+
+.font-heading {
+  font-family: "Black Han Sans", sans-serif;
+  font-weight: 800;
+}
